@@ -1,0 +1,32 @@
+:root {
+  font-family: Oxygen Mono;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+}
+
+body {
+  background-color: #b56576;
+}
+
+nav {
+  background-color: #6d597a;
+}
+
+li {
+  color: #eaac8b;
+}
+
+@media (min-width: 992px) {
+  .navbar li {
+    margin-left: 1em;
+    margin-right: 2em;
+    font-size: 30px;
+  }
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #e56b6f;
+  border-color: #e56b6f;
+}
