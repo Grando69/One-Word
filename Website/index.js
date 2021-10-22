@@ -1,72 +1,129 @@
-const BgColor = "#247BA0";
-const SnakeColor = "#F0F4EF";
-const FoodColor = "#DB9D47";
+const BG_COLOUR = "#231f20";
+const SNAKE_COLOUR = "#c2c2c2";
+const FOOD_COLOUR = "#e66916";
 
-const socket = io("http://127.0.0.1:8080");
+const socket = io("https://sleepy-island-33889.herokuapp.com/");
 
 socket.on("init", handleInit);
 socket.on("gameState", handleGameState);
 socket.on("gameOver", handleGameOver);
+socket.on("gameCode", handleGameCode);
+socket.on("unknownCode", handleUnknownCode);
+socket.on("tooManyPlayers", handleTooManyPlayers);
 
 const gameScreen = document.getElementById("gameScreen");
 const initialScreen = document.getElementById("initialScreen");
-// ! 42:32 https://www.youtube.com/watch?v=ppcBIHv_ZPs&t=43m32s
+const newGameBtn = document.getElementById("newGameButton");
+const joinGameBtn = document.getElementById("joinGameButton");
+const gameCodeInput = document.getElementById("gameCodeInput");
+const gameCodeDisplay = document.getElementById("gameCodeDisplay");
+
+newGameBtn.addEventListener("click", newGame);
+joinGameBtn.addEventListener("click", joinGame);
+
+function newGame() {
+  socket.emit("newGame");
+  init();
+}
+
+function joinGame() {
+  const code = gameCodeInput.value;
+  socket.emit("joinGame", code);
+  init();
+}
 
 let canvas, ctx;
+let playerNumber;
+let gameActive = false;
 
 function init() {
+  initialScreen.style.display = "none";
+  gameScreen.style.display = "block";
+
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
 
   canvas.width = canvas.height = 600;
 
-  ctx.fillStyle = BgColor;
+  ctx.fillStyle = BG_COLOUR;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   document.addEventListener("keydown", keydown);
+  gameActive = true;
 }
 
-function keydown(key) {
-  socket.emit("keyDown", key.keyCode);
+function keydown(e) {
+  socket.emit("keydown", e.keyCode);
 }
-
-init();
 
 function paintGame(state) {
-  ctx.fillStyle = BgColor;
+  ctx.fillStyle = BG_COLOUR;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const food = state.food;
-  const gridSize = state.gridSize;
-  const size = canvas.width / gridSize;
+  const gridsize = state.gridsize;
+  const size = canvas.width / gridsize;
 
-  ctx.fillStyle = FoodColor;
+  ctx.fillStyle = FOOD_COLOUR;
   ctx.fillRect(food.x * size, food.y * size, size, size);
 
-  paintPlayer(state.player, size, SnakeColor);
+  paintPlayer(state.players[0], size, SNAKE_COLOUR);
+  paintPlayer(state.players[1], size, "red");
 }
 
-function paintPlayer(playerState, size, color) {
+function paintPlayer(playerState, size, colour) {
   const snake = playerState.snake;
 
-  ctx.fillStyle = color;
+  ctx.fillStyle = colour;
   for (let cell of snake) {
     ctx.fillRect(cell.x * size, cell.y * size, size, size);
   }
 }
 
-function handleInit(msg) {
-  console.log(msg);
+function handleInit(number) {
+  playerNumber = number;
 }
 
 function handleGameState(gameState) {
+  if (!gameActive) {
+    return;
+  }
   gameState = JSON.parse(gameState);
-
-  requestAnimationFrame(() => {
-    paintGame(gameState);
-  });
+  requestAnimationFrame(() => paintGame(gameState));
 }
 
-function handleGameOver() {
-  alert("You Lose!");
+function handleGameOver(data) {
+  if (!gameActive) {
+    return;
+  }
+  data = JSON.parse(data);
+
+  gameActive = false;
+
+  if (data.winner === playerNumber) {
+    alert("You Win!");
+  } else {
+    alert("You Lose :(");
+  }
+}
+
+function handleGameCode(gameCode) {
+  gameCodeDisplay.innerText = gameCode;
+}
+
+function handleUnknownCode() {
+  reset();
+  alert("Unknown Game Code");
+}
+
+function handleTooManyPlayers() {
+  reset();
+  alert("This game is already in progress");
+}
+
+function reset() {
+  playerNumber = null;
+  gameCodeInput.value = "";
+  initialScreen.style.display = "block";
+  gameScreen.style.display = "none";
 }
