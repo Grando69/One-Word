@@ -6,12 +6,22 @@ const wordConfirm = document.getElementById("wordConfirm");
 const wordConfirmDisabled = document.getElementById("wordConfirmDisabled");
 const wordInput = document.getElementById("wordInput");
 const currentSentence = document.getElementById("currentSentence");
+const id = document.getElementById("id");
+const joinButton = document.getElementById("joinButton");
+const joinInput = document.getElementById("joinInput");
+const createNewButton = document.getElementById("createNewButton");
+const titleScreen = document.getElementById("titleScreen");
+const gameScreen = document.getElementById("gameScreen");
 
 wordConfirm.addEventListener("click", handleWordConfirm);
+createNewButton.addEventListener("click", handleNewGame);
+joinButton.addEventListener("click", handleJoinGame);
 
-socket.on("test", (msg) => {
+socket.on("init", (msg) => {
   console.log(msg);
 });
+
+socket.on("gameCode", handleGameCode);
 
 function handleWordConfirm() {
   enableButton();
@@ -38,4 +48,22 @@ function disableButton() {
 function enableButton() {
   wordConfirm.style.display = "block";
   wordConfirmDisabled.style.display = "none";
+}
+
+function handleGameCode(gameCode) {
+  id.innerText = gameCode;
+}
+
+function handleNewGame() {
+  socket.emit("newGame");
+  titleScreen.style.display = "none";
+  gameScreen.style.display = "flex";
+  // gameScreen.style.flexDirection =
+}
+
+function handleJoinGame() {
+  const code = joinInput.value;
+  socket.emit("joinGame", code);
+  titleScreen.style.display = "none";
+  gameScreen.style.display = "flex";
 }

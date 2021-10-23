@@ -43,30 +43,37 @@
       <form class="d-flex me-1">
         <input
           placeholder="Enter Game Code"
-          type="text"
+          type="password"
           class="form-controll me-2"
           maxlength="6"
+          id="joinInput"
         />
-        <button type="submit" class="btn btn-primary">Join</button>
+        <button type="submit" class="btn btn-primary" id="joinButton">Join</button>
       </form>
     </nav>
-
     <section class="vh-100">
       <div class="h-100">
         <div
-            class="
-              d-flex
-              flex-column
-              align-items-center
-              justify-content-center
-              h-100
-            "
-          >
-          <h3 id="idTitle">Your id is <span id="id">18769</span></h3>
+        class="
+        d-flex
+        flex-column
+        align-items-center
+        justify-content-center
+        h-100
+        "
+        >
+        <div id="titleScreen"><h1 id="welcomeText">Welcome to ONE WORD a game by Grando69. If you are new here check out the How to play above. If you want to start a new game, press the button below.</h1>
+        
+          <button class="btn btn-primary mt-1 " id="createNewButton">Create new Game</button>
+        </div>
+
+        <div id="gameScreen">
+          <h3 id="idTitle">Your id is <span id="id"></span></h3>
           <span id="currentSentence"></span>
           <input placeholder="Enter your Word" maxlength="69" type="text" class="form-controll mb-1" id="wordInput">
           <button class="btn btn-primary mt-1 disabled" id="wordConfirmDisabled">Submit</button>
           <button class="btn btn-primary mt-1 " id="wordConfirm">Submit</button>
+        </div>
       </div>
 
     </section>

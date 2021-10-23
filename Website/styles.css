@@ -17,6 +17,10 @@ li {
   color: #eaac8b;
 }
 
+div {
+  text-align: center;
+}
+
 .navbar li {
   margin-left: 3em;
   margin-right: 3em;
@@ -26,6 +30,21 @@ li {
 .btn-primary {
   background-color: #e56b6f;
   border-color: #e56b6f;
+}
+#gameScreen {
+  /* ! */
+  display: none;
+  flex-direction: column;
+}
+
+#titleScreen {
+  /* ! */
+  display: block;
+}
+
+#welcomeText {
+  margin: 15px;
+  margin-bottom: 20px;
 }
 
 #wordConfirmDisabled {
@@ -46,12 +65,22 @@ li {
   background-color: #e56b6f;
   border: 5px;
   border-radius: 10px;
-  transition: color 0.5s ease-in-out;
+  transition: color 0.3s ease-in-out;
 }
 
 #id:hover {
   color: black;
 }
+/* 
+#idTitle{
+
+  transform: rotate(360.000deg);
+  transition: transform 1s ease-in;
+}
+
+#idTitle:hover {
+  transform: rotate(0);
+} */
 
 @media screen and (max-width: 768px) {
   .navbar li {
