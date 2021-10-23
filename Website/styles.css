@@ -2,7 +2,7 @@
   font-family: Oxygen Mono;
   font-style: normal;
   font-weight: normal;
-  font-size: 20px;
+  font-size: 22px;
 }
 
 body {
@@ -17,16 +17,51 @@ li {
   color: #eaac8b;
 }
 
-@media (min-width: 992px) {
-  .navbar li {
-    margin-left: 3em;
-    margin-right: 3em;
-    font-size: 30px;
-  }
+.navbar li {
+  margin-left: 3em;
+  margin-right: 3em;
+  font-size: 30px;
 }
 
 .btn-primary {
-  color: #fff;
   background-color: #e56b6f;
   border-color: #e56b6f;
+}
+
+#wordConfirmDisabled {
+  display: none;
+}
+
+#currentSentence {
+  margin-bottom: 75px;
+  font-weight: bold;
+  font-size: xx-large;
+  word-break: normal;
+  text-align: center;
+  padding: 100px;
+}
+
+#id {
+  color: #e56b6f;
+  background-color: #e56b6f;
+  border: 5px;
+  border-radius: 10px;
+  transition: color 0.5s ease-in-out;
+}
+
+#id:hover {
+  color: black;
+}
+
+@media screen and (max-width: 768px) {
+  .navbar li {
+    margin-left: 5px;
+    margin-right: 0px;
+    font-size: 20px;
+  }
+  #currentSentence {
+    margin-bottom: 50px;
+    font-size: large;
+    padding: 15 px;
+  }
 }

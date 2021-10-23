@@ -45,6 +45,7 @@
           placeholder="Enter Game Code"
           type="text"
           class="form-controll me-2"
+          maxlength="6"
         />
         <button type="submit" class="btn btn-primary">Join</button>
       </form>
@@ -61,9 +62,11 @@
               h-100
             "
           >
+          <h3 id="idTitle">Your id is <span id="id">18769</span></h3>
           <span id="currentSentence"></span>
-          <input placeholder="Enter your Word" type="text" class="form-controll mb-1" id="wordInput">
-          <button class="btn btn-primary mt-1" id="wordConfirm">Submit</button>
+          <input placeholder="Enter your Word" maxlength="69" type="text" class="form-controll mb-1" id="wordInput">
+          <button class="btn btn-primary mt-1 disabled" id="wordConfirmDisabled">Submit</button>
+          <button class="btn btn-primary mt-1 " id="wordConfirm">Submit</button>
       </div>
 
     </section>
