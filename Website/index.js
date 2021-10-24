@@ -13,15 +13,21 @@ const createNewButton = document.getElementById("createNewButton");
 const titleScreen = document.getElementById("titleScreen");
 const gameScreen = document.getElementById("gameScreen");
 
+let buttonEnabled = true;
+let playerNumber;
+
 wordConfirm.addEventListener("click", handleWordConfirm);
 createNewButton.addEventListener("click", handleNewGame);
 joinButton.addEventListener("click", handleJoinGame);
 
-socket.on("init", (msg) => {
-  console.log(msg);
+document.querySelector("#wordInput").addEventListener("keyup", (event) => {
+  if (event.key !== "Enter" || !buttonEnabled) return;
+  wordConfirm.click();
 });
 
 socket.on("gameCode", handleGameCode);
+
+socket.on("init", handleInit);
 
 function handleWordConfirm() {
   enableButton();
@@ -41,11 +47,13 @@ function handleWordConfirm() {
 }
 
 function disableButton() {
+  buttonEnabled = false;
   wordConfirm.style.display = "none";
   wordConfirmDisabled.style.display = "block";
 }
 
 function enableButton() {
+  buttonEnabled = true;
   wordConfirm.style.display = "block";
   wordConfirmDisabled.style.display = "none";
 }
@@ -56,14 +64,23 @@ function handleGameCode(gameCode) {
 
 function handleNewGame() {
   socket.emit("newGame");
-  titleScreen.style.display = "none";
-  gameScreen.style.display = "flex";
-  // gameScreen.style.flexDirection =
+  init();
 }
 
 function handleJoinGame() {
   const code = joinInput.value;
   socket.emit("joinGame", code);
+  init();
+  handleGameCode(code);
+  disableButton();
+}
+
+function init() {
   titleScreen.style.display = "none";
   gameScreen.style.display = "flex";
+}
+
+function handleInit(number) {
+  playerNumber = number;
+  console.log(playerNumber);
 }

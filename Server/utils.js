@@ -1,3 +1,8 @@
+/**
+ *
+ * @param { number } lenght
+ * @returns { string } Id
+ */
 function makeId(lenght) {
   var result = "";
   var characters =
@@ -8,7 +13,19 @@ function makeId(lenght) {
   }
   return result;
 }
+/**
+ *
+ * @param { string[] } players
+ * @param { string } currentPlayer
+ * @returns { string } nextPlayer
+ */
+function calculateNextTurn(players, currentPlayer) {
+  if(!(currentPlayer in players)) return;
+  else if(currentPlayer < players.length) return String(parseInt(currentPlayer)++);
+  else if(currentPlayer == players.length) return "1"
+}
 
 module.exports = {
   makeId,
+  calculateNextTurn,
 };

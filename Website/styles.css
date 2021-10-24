@@ -32,17 +32,6 @@ div {
   border-color: #e56b6f;
 }
 
-#gameScreen {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-}
-
-#welcomeText {
-  margin: 15px;
-  margin-bottom: 20px;
-}
-
 #wordConfirmDisabled {
   display: none;
 }

@@ -14,6 +14,19 @@
 
     <link rel="stylesheet" href="styles.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <style>
+      #gameScreen {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #welcomeText {
+        display: block;
+        margin: 15px;
+        margin-bottom: 20px;
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar fixed-top navbar-expand-xl navbar-dark">
@@ -40,16 +53,16 @@
           </li>
         </ul>
       </div>
-      <form class="d-flex me-1">
+      <div class="d-flex me-1">
         <input
           placeholder="Enter Game Code"
-          type="password"
+          type="text"
           class="form-controll me-2"
-          maxlength="6"
+          maxlength="5"
           id="joinInput"
         />
-        <button type="submit" class="btn btn-primary" id="joinButton">Join</button>
-      </form>
+        <button type="button" class="btn btn-primary" id="joinButton">Join</button>
+      </div>
     </nav>
     <section class="vh-100">
       <div class="h-100">
@@ -71,8 +84,8 @@
           <h3 id="idTitle">Your id is <span id="id"></span></h3>
           <span id="currentSentence"></span>
           <input placeholder="Enter your Word" maxlength="69" type="text" class="form-controll mb-1" id="wordInput">
-          <button class="btn btn-primary mt-1 disabled" id="wordConfirmDisabled">Submit</button>
-          <button class="btn btn-primary mt-1 " id="wordConfirm">Submit</button>
+          <button type="button" class="btn btn-primary mt-1 disabled" id="wordConfirmDisabled">Submit</button>
+          <button class="btn btn-primary mt-1 " type="button" id="wordConfirm">Submit</button>
         </div>
       </div>
 

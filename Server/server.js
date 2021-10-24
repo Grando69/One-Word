@@ -4,6 +4,7 @@ const { makeId } = require("./utils");
 const clientRooms = {};
 
 io.on("connection", (client) => {
+  console.log("new connection");
   client.on("newGame", handleNewGame);
   client.on("joinGame", handleJoinGame);
 
@@ -31,18 +32,24 @@ io.on("connection", (client) => {
     clientRooms[client.id] = roomName;
 
     client.join(roomName);
-    client.number = numClients;
+    client.number = numClients + 1;
     client.emit("init", numClients);
+
+    console.log("a player joined" + ` player number ${client.number + 1}`);
   }
 
   function handleNewGame() {
     let roomName = makeId(5);
+    if (roomName in Object.values(clientRooms)) {
+      handleNewGame();
+    }
     clientRooms[client.id] = roomName;
     client.emit("gameCode", roomName);
 
     client.join(roomName);
     client.number = 1;
     client.emit("init", 1);
+    console.log("new game created");
   }
 });
 io.listen(8080);
