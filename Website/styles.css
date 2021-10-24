@@ -31,15 +31,11 @@ div {
   background-color: #e56b6f;
   border-color: #e56b6f;
 }
+
 #gameScreen {
-  /* ! */
   display: none;
   flex-direction: column;
-}
-
-#titleScreen {
-  /* ! */
-  display: block;
+  align-items: center;
 }
 
 #welcomeText {
@@ -52,7 +48,7 @@ div {
 }
 
 #currentSentence {
-  margin-bottom: 75px;
+  /* margin-bottom: 75px; */
   font-weight: bold;
   font-size: xx-large;
   word-break: normal;
