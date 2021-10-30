@@ -102,12 +102,15 @@
           <button class="btn btn-primary mt-1 " type="button" id="wordConfirm">Submit</button>
           <button class="btn btn-primary mt-1 " type="button" id="reset">Reset + Download</button>
           <button class="btn btn-primary mt-1 disabled" type="button" id="resetDisabled">Reset + Download</button>
-
+          <div id="players">
+            <div id="currentPlayerDiv">It's <span id="currentPlayerSpan"></span> turn</div>
+            <div id="playerNumberdiv">You are player <span id="playerNumberSpan"></span></div>
 
         </div>
       </div>
-
-    </section>
+    </div>
+    
+  </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script src="index.js"></script>
