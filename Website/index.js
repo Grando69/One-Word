@@ -1,4 +1,4 @@
-const socket = io("127.0.0.1:8080");
+const socket = io("https://rows-josh-newcastle-bay.trycloudflare.com");
 
 // !127.0.0.1 == localhost
 
@@ -15,6 +15,8 @@ const gameScreen = document.getElementById("gameScreen");
 
 let buttonEnabled = true;
 let playerNumber;
+wordInput.value = "";
+let currentPlayer;
 
 wordConfirm.addEventListener("click", handleWordConfirm);
 createNewButton.addEventListener("click", handleNewGame);
@@ -22,25 +24,32 @@ joinButton.addEventListener("click", handleJoinGame);
 
 document.querySelector("#wordInput").addEventListener("keyup", (event) => {
   if (event.key !== "Enter" || !buttonEnabled) return;
-  wordConfirm.click();
+  else wordConfirm.click();
 });
 
 socket.on("gameCode", handleGameCode);
 
 socket.on("init", handleInit);
 
+socket.on("continue", handleContinue);
+
+// socket.on("gameState")
+
+// TODO get the next player if state.currentPlayer == playerNumber enableButton()
+// on click of the button send the new state and now do /\
+
 function handleWordConfirm() {
-  enableButton();
   if (wordInput.value) {
     if (currentSentence.innerText.length === 0) {
-      currentSentence.innerText = `${currentSentence.innerText} ${wordInput.value}`;
+      currentSentence.innerText = `${wordInput.value}`;
     } else {
       currentSentence.innerText = `${
         currentSentence.innerText
       } ${wordInput.value.toLowerCase()}`;
     }
     wordInput.value = "";
-    // disableButton();
+    disableButton();
+    socket.emit("next", id.innerText, currentSentence.innerText);
   } else {
     alert("Please Input something bruh");
   }
@@ -65,6 +74,7 @@ function handleGameCode(gameCode) {
 function handleNewGame() {
   socket.emit("newGame");
   init();
+  currentPlayer = playerNumber;
 }
 
 function handleJoinGame() {
@@ -83,4 +93,14 @@ function init() {
 function handleInit(number) {
   playerNumber = number;
   console.log(playerNumber);
+}
+
+function handleContinue(state) {
+  currentPlayer = state.currentPlayer;
+  console.log(state);
+  if (state.currentPlayer === playerNumber.toString()) {
+    enableButton();
+  }
+
+  currentSentence.innerText = state.currentSentence;
 }

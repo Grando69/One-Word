@@ -30,7 +30,7 @@
   </head>
   <body>
     <nav class="navbar fixed-top navbar-expand-xl navbar-dark">
-      <a href="#" class="navbar-brand ms-1 current">ONE WORD</a>
+      <a href="index.html" class="navbar-brand ms-1 current">ONE WORD</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -60,6 +60,7 @@
           class="form-controll me-2"
           maxlength="5"
           id="joinInput"
+          size="8"
         />
         <button type="button" class="btn btn-primary" id="joinButton">Join</button>
       </div>
@@ -83,7 +84,7 @@
         <div id="gameScreen">
           <h3 id="idTitle">Your id is <span id="id"></span></h3>
           <span id="currentSentence"></span>
-          <input placeholder="Enter your Word" maxlength="69" type="text" class="form-controll mb-1" id="wordInput">
+          <input placeholder="Enter your Word" onkeypress="return event.charCode != 32" maxlength="69" type="text" class="form-controll mb-1" id="wordInput">
           <button type="button" class="btn btn-primary mt-1 disabled" id="wordConfirmDisabled">Submit</button>
           <button class="btn btn-primary mt-1 " type="button" id="wordConfirm">Submit</button>
         </div>

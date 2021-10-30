@@ -20,9 +20,10 @@ function makeId(lenght) {
  * @returns { string } nextPlayer
  */
 function calculateNextTurn(players, currentPlayer) {
-  if(!(currentPlayer in players)) return;
-  else if(currentPlayer < players.length) return String(parseInt(currentPlayer)++);
-  else if(currentPlayer == players.length) return "1"
+  // if (!(currentPlayer in players)) return;
+  if (currentPlayer < players.length)
+    return (parseInt(currentPlayer) + 1).toString();
+  else if (currentPlayer == players.length) return "1";
 }
 
 module.exports = {

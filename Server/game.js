@@ -1,41 +1,8 @@
-const { GRID_SIZE } = require("./constants");
-
 function createGameState() {
   return {
-    players: [
-      {
-        pos: {
-          x: 3,
-          y: 10,
-        },
-        vel: {
-          x: 1,
-          y: 0,
-        },
-        snake: [
-          { x: 1, y: 10 },
-          { x: 2, y: 10 },
-          { x: 3, y: 10 },
-        ],
-      },
-      {
-        pos: {
-          x: 18,
-          y: 10,
-        },
-        vel: {
-          x: 0,
-          y: 0,
-        },
-        snake: [
-          { x: 20, y: 10 },
-          { x: 19, y: 10 },
-          { x: 18, y: 10 },
-        ],
-      },
-    ],
-    food: {},
-    gridSize: GRID_SIZE,
+    currentSentence: "",
+    currentPlayer: "1",
+    players: ["1"],
   };
 }
 
@@ -150,7 +117,6 @@ function getUpdatedVelocity(keyCode) {
 
 function initGame() {
   const state = createGameState();
-  randomFood(state);
   return state;
 }
 

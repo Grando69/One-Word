@@ -1,12 +1,15 @@
 const io = require("socket.io")();
-const { makeId } = require("./utils");
+const { initGame } = require("./game");
+const { makeId, calculateNextTurn } = require("./utils");
 
 const clientRooms = {};
+const state = {};
 
 io.on("connection", (client) => {
   console.log("new connection");
   client.on("newGame", handleNewGame);
   client.on("joinGame", handleJoinGame);
+  client.on("next", handleNext);
 
   function handleJoinGame(roomName) {
     const room = io.sockets.adapter.rooms[roomName];
@@ -33,9 +36,10 @@ io.on("connection", (client) => {
 
     client.join(roomName);
     client.number = numClients + 1;
-    client.emit("init", numClients);
+    state[roomName].players.push(String(client.number));
+    client.emit("init", client.number);
 
-    console.log("a player joined" + ` player number ${client.number + 1}`);
+    console.log("a player joined" + ` player number ${client.number}`);
   }
 
   function handleNewGame() {
@@ -48,8 +52,21 @@ io.on("connection", (client) => {
 
     client.join(roomName);
     client.number = 1;
+    state[roomName] = initGame();
     client.emit("init", 1);
     console.log("new game created");
+  }
+
+  function handleNext(roomname, sentence) {
+    let currentplayer = state[roomname].currentPlayer;
+    let players = state[roomname].players;
+
+    state[roomname].currentPlayer = calculateNextTurn(players, currentplayer);
+    state[roomname].currentSentence = sentence;
+
+    // console.log(state[roomname].currentSentence);
+
+    io.sockets.in(roomname).emit("continue", state[roomname]);
   }
 });
 io.listen(8080);
