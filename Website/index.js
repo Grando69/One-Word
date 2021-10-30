@@ -1,4 +1,5 @@
-const socket = io("https://count-edmonton-did-cambodia.trycloudflare.com/");
+// const socket = io("https://count-  edmonton-did-cambodia.trycloudflare.com/");
+const socket = io("127.0.0.1:8080");
 
 // !127.0.0.1 == localhost
 
@@ -43,7 +44,12 @@ socket.on("unknownCode", handleUnknownCode);
 
 function handleWordConfirm() {
   if (wordInput.value) {
-    if (currentSentence.innerText.length === 0) {
+    if (
+      currentSentence.innerText.length === 0 ||
+      currentSentence.innerText
+        .split(" ")
+        [currentSentence.innerText.split(" ").length - 1].endsWith(".")
+    ) {
       currentSentence.innerText = `${wordInput.value}`;
     } else {
       currentSentence.innerText = `${
@@ -116,13 +122,14 @@ function handleInit(number) {
 
 function handleContinue(state) {
   currentPlayer = state.currentPlayer;
+  console.log(state);
   if (state.currentPlayer === playerNumber.toString()) {
     enableButton();
     currentPlayerSpan.innerText = "your";
   } else {
     currentPlayerSpan.innerText = "player number " + currentPlayer + "'s";
-    currentSentence.innerText = state.currentSentence;
   }
+  currentSentence.innerText = state.currentSentence;
 }
 
 function download(filename, text) {
