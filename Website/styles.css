@@ -53,6 +53,12 @@ div {
   padding: 100px;
 }
 
+#players {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
 #id {
   margin: 10px;
   color: #e56b6f;
@@ -94,7 +100,15 @@ div {
     padding: 15px;
   }
   #joinInput {
-    size: 5;
+    size: 5px;
+  }
+
+  #idTitle {
+    font-size: 25px;
+  }
+
+  #player div {
+    font-size: 5px;
   }
 
   .navbar-brand {

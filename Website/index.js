@@ -16,6 +16,8 @@ const titleScreen = document.getElementById("titleScreen");
 const gameScreen = document.getElementById("gameScreen");
 const resetButton = document.getElementById("reset");
 const resetDisabled = document.getElementById("resetDisabled");
+const currentPlayerSpan = document.getElementById("currentPlayerSpan");
+const playerNumberSpan = document.getElementById("playerNumberSpan");
 
 let buttonEnabled = true;
 let playerNumber;
@@ -80,6 +82,7 @@ function handleNewGame() {
   socket.emit("newGame");
   init();
   currentPlayer = playerNumber;
+  currentPlayerSpan.innerText = "your";
   enableButton();
 }
 
@@ -88,6 +91,7 @@ function handleJoinGame() {
   socket.emit("joinGame", code);
   init();
   handleGameCode(code);
+  currentPlayerSpan.innerText = `player number 1's`;
   disableButton();
 }
 
@@ -106,17 +110,19 @@ function init() {
 
 function handleInit(number) {
   playerNumber = number;
+  playerNumberSpan.innerText = playerNumber;
   console.log(playerNumber);
 }
 
 function handleContinue(state) {
   currentPlayer = state.currentPlayer;
-  console.log(state);
   if (state.currentPlayer === playerNumber.toString()) {
     enableButton();
+    currentPlayerSpan.innerText = "your";
+  } else {
+    currentPlayerSpan.innerText = "player number " + currentPlayer + "'s";
+    currentSentence.innerText = state.currentSentence;
   }
-
-  currentSentence.innerText = state.currentSentence;
 }
 
 function download(filename, text) {
