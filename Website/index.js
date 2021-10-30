@@ -1,4 +1,4 @@
-const socket = io("https://rows-josh-newcastle-bay.trycloudflare.com");
+const socket = io("https://count-edmonton-did-cambodia.trycloudflare.com/");
 
 // !127.0.0.1 == localhost
 
@@ -9,21 +9,23 @@ const currentSentence = document.getElementById("currentSentence");
 const id = document.getElementById("id");
 const joinButton = document.getElementById("joinButton");
 const joinInput = document.getElementById("joinInput");
+const joinButtonMobile = document.getElementById("joinButtonMobile");
+const joinInputMobile = document.getElementById("joinInputMobile");
 const createNewButton = document.getElementById("createNewButton");
 const titleScreen = document.getElementById("titleScreen");
 const gameScreen = document.getElementById("gameScreen");
-const reset = document.getElementById("reset");
+const resetButton = document.getElementById("reset");
 const resetDisabled = document.getElementById("resetDisabled");
 
 let buttonEnabled = true;
 let playerNumber;
 wordInput.value = "";
 let currentPlayer;
-
 wordConfirm.addEventListener("click", handleWordConfirm);
 createNewButton.addEventListener("click", handleNewGame);
 joinButton.addEventListener("click", handleJoinGame);
-reset.addEventListener("click", handleReset);
+joinButtonMobile.addEventListener("click", handleJoinGameMobile);
+resetButton.addEventListener("click", handleReset);
 
 document.querySelector("#wordInput").addEventListener("keyup", (event) => {
   if (event.key !== "Enter" || !buttonEnabled) return;
@@ -31,15 +33,11 @@ document.querySelector("#wordInput").addEventListener("keyup", (event) => {
 });
 
 socket.on("gameCode", handleGameCode);
-
 socket.on("init", handleInit);
-
 socket.on("continue", handleContinue);
-
-// socket.on("gameState")
-
-// TODO get the next player if state.currentPlayer == playerNumber enableButton()
-// on click of the button send the new state and now do /\
+socket.on("running", handleRunning);
+socket.on("tooManyPlayers", handleTooManyPlayers);
+socket.on("unknownCode", handleUnknownCode);
 
 function handleWordConfirm() {
   if (wordInput.value) {
@@ -61,7 +59,7 @@ function handleWordConfirm() {
 function disableButton() {
   buttonEnabled = false;
   wordConfirm.style.display = "none";
-  reset.style.display = "none";
+  resetButton.style.display = "none";
   wordConfirmDisabled.style.display = "block";
   resetDisabled.style.display = "block";
 }
@@ -69,7 +67,7 @@ function disableButton() {
 function enableButton() {
   buttonEnabled = true;
   wordConfirm.style.display = "block";
-  reset.style.display = "block";
+  resetButton.style.display = "block";
   wordConfirmDisabled.style.display = "none";
   resetDisabled.style.display = "none";
 }
@@ -87,6 +85,14 @@ function handleNewGame() {
 
 function handleJoinGame() {
   const code = joinInput.value;
+  socket.emit("joinGame", code);
+  init();
+  handleGameCode(code);
+  disableButton();
+}
+
+function handleJoinGameMobile() {
+  const code = joinInputMobile.value;
   socket.emit("joinGame", code);
   init();
   handleGameCode(code);
@@ -138,4 +144,26 @@ function handleReset() {
   }
   socket.emit("reset", id.innerText);
   download(`${id.innerText}.txt`, currentSentence.innerText);
+}
+
+function reset() {
+  playerNumber = null;
+  joinInput.value = "";
+  titleScreen.style.display = "flex";
+  gameScreen.style.display = "none";
+}
+
+function handleRunning() {
+  reset();
+  alert("The game you tried to join is allready running");
+}
+
+function handleTooManyPlayers() {
+  reset();
+  alert("This room already has 8 players in it.");
+}
+
+function handleUnknownCode() {
+  reset();
+  alert("The gamecode is invalid. Please try again.");
 }

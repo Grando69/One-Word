@@ -13,11 +13,6 @@ io.on("connection", (client) => {
   client.on("reset", handleReset);
 
   function handleJoinGame(roomName) {
-    if (state[roomName].running) {
-      socket.emit("running");
-      return;
-    }
-
     const room = io.sockets.adapter.rooms[roomName];
 
     let allUsers;
@@ -35,6 +30,10 @@ io.on("connection", (client) => {
       return;
     } else if (numClients > 8) {
       client.emit("tooManyPlayers");
+      return;
+    }
+    if (state[roomName].running) {
+      client.emit("running");
       return;
     }
 

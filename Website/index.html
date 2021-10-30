@@ -36,7 +36,7 @@
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#toggleMobileMenu"
-        aria-controls="oggleMobileMenu"
+        aria-controls="toggleMobileMenu"
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
@@ -51,18 +51,31 @@
           <li>
             <a href="#" class="nav-link">How to play</a>
           </li>
+          <li>
+            <div class="d-flex align-items-center justify-content-center">
+            <input
+            placeholder="Enter Game Code"
+            type="password"
+            class="form-controll mobileInput me-1"
+            maxlength="5"
+            id="joinInputMobile"
+            size="9"
+          />
+          <button type="button" class="btn btn-primary mobileButton" id="joinButtonMobile">Join</button>
+        </div>
+          </li>
         </ul>
       </div>
       <div class="d-flex me-1">
         <input
           placeholder="Enter Game Code"
           type="password"
-          class="form-controll me-2"
+          class="form-controll me-2 webInput"
           maxlength="5"
           id="joinInput"
           size="8"
         />
-        <button type="button" class="btn btn-primary" id="joinButton">Join</button>
+        <button type="button" class="btn btn-primary webButton" id="joinButton">Join</button>
       </div>
     </nav>
     <section class="vh-100">

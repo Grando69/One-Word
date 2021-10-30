@@ -27,6 +27,14 @@ div {
   font-size: 30px;
 }
 
+.mobileButton {
+  display: none;
+}
+
+.mobileInput {
+  display: none;
+}
+
 .btn-primary {
   background-color: #e56b6f;
   border-color: #e56b6f;
@@ -57,6 +65,12 @@ div {
 #id:hover {
   color: black;
 }
+
+#titleScreen {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 /* 
 #idTitle{
 
@@ -81,5 +95,26 @@ div {
   }
   #joinInput {
     size: 5;
+  }
+
+  .navbar-brand {
+    font-size: large;
+  }
+
+  .webInput {
+    display: none;
+  }
+
+  .webButton {
+    display: none;
+  }
+
+  .mobileButton {
+    display: flex;
+    padding: 2px;
+  }
+
+  .mobileInput {
+    display: flex;
   }
 }
