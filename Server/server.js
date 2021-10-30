@@ -10,8 +10,14 @@ io.on("connection", (client) => {
   client.on("newGame", handleNewGame);
   client.on("joinGame", handleJoinGame);
   client.on("next", handleNext);
+  client.on("reset", handleReset);
 
   function handleJoinGame(roomName) {
+    if (state[roomName].running) {
+      socket.emit("running");
+      return;
+    }
+
     const room = io.sockets.adapter.rooms[roomName];
 
     let allUsers;
@@ -60,13 +66,22 @@ io.on("connection", (client) => {
   function handleNext(roomname, sentence) {
     let currentplayer = state[roomname].currentPlayer;
     let players = state[roomname].players;
-
+    if (!state[roomname].running) {
+      state[roomname].running = true;
+    }
     state[roomname].currentPlayer = calculateNextTurn(players, currentplayer);
     state[roomname].currentSentence = sentence;
 
     // console.log(state[roomname].currentSentence);
 
     io.sockets.in(roomname).emit("continue", state[roomname]);
+  }
+
+  function handleReset(roomName) {
+    // console.log("reset");
+    state[roomName].currentSentence = "";
+    state[roomName].running = false;
+    io.sockets.in(roomName).emit("continue", state[roomName]);
   }
 });
 io.listen(8080);

@@ -12,6 +12,8 @@ const joinInput = document.getElementById("joinInput");
 const createNewButton = document.getElementById("createNewButton");
 const titleScreen = document.getElementById("titleScreen");
 const gameScreen = document.getElementById("gameScreen");
+const reset = document.getElementById("reset");
+const resetDisabled = document.getElementById("resetDisabled");
 
 let buttonEnabled = true;
 let playerNumber;
@@ -21,6 +23,7 @@ let currentPlayer;
 wordConfirm.addEventListener("click", handleWordConfirm);
 createNewButton.addEventListener("click", handleNewGame);
 joinButton.addEventListener("click", handleJoinGame);
+reset.addEventListener("click", handleReset);
 
 document.querySelector("#wordInput").addEventListener("keyup", (event) => {
   if (event.key !== "Enter" || !buttonEnabled) return;
@@ -58,13 +61,17 @@ function handleWordConfirm() {
 function disableButton() {
   buttonEnabled = false;
   wordConfirm.style.display = "none";
+  reset.style.display = "none";
   wordConfirmDisabled.style.display = "block";
+  resetDisabled.style.display = "block";
 }
 
 function enableButton() {
   buttonEnabled = true;
   wordConfirm.style.display = "block";
+  reset.style.display = "block";
   wordConfirmDisabled.style.display = "none";
+  resetDisabled.style.display = "none";
 }
 
 function handleGameCode(gameCode) {
@@ -75,6 +82,7 @@ function handleNewGame() {
   socket.emit("newGame");
   init();
   currentPlayer = playerNumber;
+  enableButton();
 }
 
 function handleJoinGame() {
@@ -103,4 +111,31 @@ function handleContinue(state) {
   }
 
   currentSentence.innerText = state.currentSentence;
+}
+
+function download(filename, text) {
+  var element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+  );
+  element.setAttribute("download", filename);
+
+  element.style.display = "none";
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+function handleReset() {
+  if (currentSentence.innerText.split(" ").length < 3) {
+    alert(
+      "Please have a sentence with 3 or more words to reset and download it."
+    );
+    return;
+  }
+  socket.emit("reset", id.innerText);
+  download(`${id.innerText}.txt`, currentSentence.innerText);
 }

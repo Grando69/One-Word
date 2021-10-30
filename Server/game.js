@@ -3,6 +3,7 @@ function createGameState() {
     currentSentence: "",
     currentPlayer: "1",
     players: ["1"],
+    running: false,
   };
 }
 
