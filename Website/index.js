@@ -1,4 +1,4 @@
-// const socket = io("https://count-  edmonton-did-cambodia.trycloudflare.com/");
+// const socket = io("139.177.178.13:8080");
 const socket = io("127.0.0.1:8080");
 
 // !127.0.0.1 == localhost
@@ -24,6 +24,7 @@ let buttonEnabled = true;
 let playerNumber;
 wordInput.value = "";
 let currentPlayer;
+let playerCount = 1;
 wordConfirm.addEventListener("click", handleWordConfirm);
 createNewButton.addEventListener("click", handleNewGame);
 joinButton.addEventListener("click", handleJoinGame);
@@ -106,6 +107,7 @@ function handleJoinGameMobile() {
   socket.emit("joinGame", code);
   init();
   handleGameCode(code);
+  currentPlayerSpan.innerText = `player number 1's`;
   disableButton();
 }
 
@@ -116,13 +118,13 @@ function init() {
 
 function handleInit(number) {
   playerNumber = number;
-  playerNumberSpan.innerText = playerNumber;
+  playerNumberSpan.innerText = `${playerNumber}/${playerCount}`;
   console.log(playerNumber);
 }
 
 function handleContinue(state) {
   currentPlayer = state.currentPlayer;
-  console.log(state);
+  // console.log(state);
   if (state.currentPlayer === playerNumber.toString()) {
     enableButton();
     currentPlayerSpan.innerText = "your";
@@ -130,6 +132,8 @@ function handleContinue(state) {
     currentPlayerSpan.innerText = "player number " + currentPlayer + "'s";
   }
   currentSentence.innerText = state.currentSentence;
+  playerCount = state.players.length;
+  playerNumberSpan.innerText = `${playerNumber}/${playerCount}`;
 }
 
 function download(filename, text) {

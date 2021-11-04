@@ -107,8 +107,9 @@ div {
     font-size: 25px;
   }
 
-  #player div {
-    font-size: 5px;
+  #players div {
+    position: relative;
+    font-size: 15px;
   }
 
   .navbar-brand {
