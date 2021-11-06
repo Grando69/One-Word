@@ -1,6 +1,6 @@
 const io = require("socket.io")();
 const { initGame } = require("./game");
-const { makeId, calculateNextTurn } = require("./utils");
+const { makeId, calculateNextTurn, removeNumber } = require("./utils");
 
 const clientRooms = {};
 const state = {};
@@ -11,6 +11,20 @@ io.on("connection", (client) => {
   client.on("joinGame", handleJoinGame);
   client.on("next", handleNext);
   client.on("reset", handleReset);
+  client.on("disconnect", handleDisconnect);
+
+  function handleDisconnect() {
+    // console.log(client.id);
+    const room = clientRooms[client.id];
+    if (room) {
+      let players = state[room].players;
+      players = removeNumber(players, client.number);
+      io.sockets.in(room).emit("playerDisconnect", client.number);
+      io.sockets.in(room).emit("continue", state[room]);
+    } else {
+      return;
+    }
+  }
 
   function handleJoinGame(roomName) {
     const room = io.sockets.adapter.rooms[roomName];
@@ -41,7 +55,7 @@ io.on("connection", (client) => {
 
     client.join(roomName);
     client.number = numClients + 1;
-    state[roomName].players.push(String(client.number));
+    state[roomName].players.push(client.number);
     client.emit("init", client.number);
 
     console.log("a player joined" + ` player number ${client.number}`);

@@ -26,7 +26,28 @@ function calculateNextTurn(players, currentPlayer) {
   else if (currentPlayer == players.length) return "1";
 }
 
+// Write a function that removes a number from an array and adjust the rest of the array
+/**
+ *
+ * @param {number[]} array
+ * @param {number} number
+ * @returns {number[]} array
+ */
+function removeNumber(array, number) {
+  var index = array.indexOf(number);
+  if (index > -1) {
+    array.splice(index, 1);
+  }
+
+  array.forEach((element) => {
+    if (element > number) array[array.indexOf(element)] -= 1;
+  });
+
+  return array;
+}
+
 module.exports = {
   makeId,
   calculateNextTurn,
+  removeNumber,
 };

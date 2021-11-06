@@ -25,6 +25,7 @@ let playerNumber;
 wordInput.value = "";
 let currentPlayer;
 let playerCount = 1;
+let inGame = false;
 wordConfirm.addEventListener("click", handleWordConfirm);
 createNewButton.addEventListener("click", handleNewGame);
 joinButton.addEventListener("click", handleJoinGame);
@@ -42,6 +43,17 @@ socket.on("continue", handleContinue);
 socket.on("running", handleRunning);
 socket.on("tooManyPlayers", handleTooManyPlayers);
 socket.on("unknownCode", handleUnknownCode);
+socket.on("playerDisconnect", handlePlayerDisconnect);
+
+window.addEventListener("beforeunload", function (e) {
+  if (inGame) {
+    var confirmationMessage = "o/";
+    (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+    return confirmationMessage; //Webkit, Safari, Chrome
+  }
+  socket.emit("disconnect");
+  inGame = false;
+});
 
 function handleWordConfirm() {
   if (wordInput.value) {
@@ -89,11 +101,13 @@ function handleNewGame() {
   socket.emit("newGame");
   init();
   currentPlayer = playerNumber;
+  inGame = true;
   currentPlayerSpan.innerText = "your";
   enableButton();
 }
 
 function handleJoinGame() {
+  inGame = true;
   const code = joinInput.value;
   socket.emit("joinGame", code);
   init();
@@ -118,7 +132,7 @@ function init() {
 
 function handleInit(number) {
   playerNumber = number;
-  playerNumberSpan.innerText = `${playerNumber}/${playerCount}`;
+  playerNumberSpan.innerText = `${playerNumber}`;
   console.log(playerNumber);
 }
 
@@ -133,7 +147,7 @@ function handleContinue(state) {
   }
   currentSentence.innerText = state.currentSentence;
   playerCount = state.players.length;
-  playerNumberSpan.innerText = `${playerNumber}/${playerCount}`;
+  playerNumberSpan.innerText = `${playerNumber}`;
 }
 
 function download(filename, text) {
@@ -183,4 +197,10 @@ function handleTooManyPlayers() {
 function handleUnknownCode() {
   reset();
   alert("The gamecode is invalid. Please try again.");
+}
+
+function handlePlayerDisconnect(playerNumberOfDisconnected) {
+  console.log(`Player ${playerNumberOfDisconnected} disconected`);
+  if (playerNumberOfDisconnected < playerNumber) playerNumber -= 1;
+  console.log(`you are now player ${playerNumber}`);
 }

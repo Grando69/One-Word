@@ -1,8 +1,13 @@
+/**
+ *
+ * @returns {object} {currentSentence: string, currentPlayer: number, players number[], running: boolean}
+ */
+
 function createGameState() {
   return {
     currentSentence: "",
-    currentPlayer: "1",
-    players: ["1"],
+    currentPlayer: 1,
+    players: [1],
     running: false,
   };
 }
