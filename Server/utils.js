@@ -1,5 +1,4 @@
 /**
- *
  * @param { number } lenght
  * @returns { string } Id
  */

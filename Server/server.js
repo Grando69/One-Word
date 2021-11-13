@@ -20,7 +20,11 @@ io.on("connection", (client) => {
       let players = state[room].players;
       players = removeNumber(players, client.number);
       io.sockets.in(room).emit("playerDisconnect", client.number);
-      io.sockets.in(room).emit("continue", state[room]);
+      if (client.number === state[room].currentPlayer) {
+        handleNext(room, state[room].currentSentence);
+      } else {
+        io.sockets.in(room).emit("continue", state[room]);
+      }
     } else {
       return;
     }
@@ -57,7 +61,9 @@ io.on("connection", (client) => {
     client.number = numClients + 1;
     state[roomName].players.push(client.number);
     client.emit("init", client.number);
-
+    io.sockets
+      .in(roomName)
+      .emit("updatePlayerCount", state[roomName].players.length);
     console.log("a player joined" + ` player number ${client.number}`);
   }
 
@@ -74,6 +80,7 @@ io.on("connection", (client) => {
     state[roomName] = initGame();
     client.emit("init", 1);
     console.log("new game created");
+    startInterval(roomName);
   }
 
   function handleNext(roomname, sentence) {
@@ -95,6 +102,17 @@ io.on("connection", (client) => {
     state[roomName].currentSentence = "";
     state[roomName].running = false;
     io.sockets.in(roomName).emit("continue", state[roomName]);
+  }
+  function startInterval(roomName) {
+    const interval = setInterval(async () => {
+      await io.sockets.in(roomName).emit("updateTime", state[roomName].endTime);
+      let difference = state[roomName].endTime - Date.now();
+      if (difference <= 0) {
+        clearInterval(interval);
+        state[roomName] = null;
+        io.sockets.in(roomName).emit("end");
+      }
+    }, 1000);
   }
 });
 io.listen(8080);

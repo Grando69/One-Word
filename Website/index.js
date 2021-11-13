@@ -1,6 +1,5 @@
 // const socket = io("139.177.178.13:8080");
 const socket = io("127.0.0.1:8080");
-
 // !127.0.0.1 == localhost
 
 const wordConfirm = document.getElementById("wordConfirm");
@@ -19,6 +18,8 @@ const resetButton = document.getElementById("reset");
 const resetDisabled = document.getElementById("resetDisabled");
 const currentPlayerSpan = document.getElementById("currentPlayerSpan");
 const playerNumberSpan = document.getElementById("playerNumberSpan");
+const playerCountSpan = document.getElementById("playerCountSpan");
+const endTimeSpan = document.getElementById("endTimeSpan");
 
 let buttonEnabled = true;
 let playerNumber;
@@ -44,6 +45,9 @@ socket.on("running", handleRunning);
 socket.on("tooManyPlayers", handleTooManyPlayers);
 socket.on("unknownCode", handleUnknownCode);
 socket.on("playerDisconnect", handlePlayerDisconnect);
+socket.on("updatePlayerCount", handleUpdatePlayerCount);
+socket.on("updateTime", handleUpdateTime);
+socket.on("end", handleEnd);
 
 window.addEventListener("beforeunload", function (e) {
   if (inGame) {
@@ -104,9 +108,11 @@ function handleNewGame() {
   inGame = true;
   currentPlayerSpan.innerText = "your";
   enableButton();
+  playerCountSpan.innerHTML = playerCount;
 }
 
 function handleJoinGame() {
+  if (inGame) return;
   inGame = true;
   const code = joinInput.value;
   socket.emit("joinGame", code);
@@ -117,6 +123,7 @@ function handleJoinGame() {
 }
 
 function handleJoinGameMobile() {
+  if (inGame) return;
   const code = joinInputMobile.value;
   socket.emit("joinGame", code);
   init();
@@ -128,6 +135,13 @@ function handleJoinGameMobile() {
 function init() {
   titleScreen.style.display = "none";
   gameScreen.style.display = "flex";
+}
+
+function unInit() {
+  playerNumber = null;
+  joinInput.value = "";
+  titleScreen.style.display = "flex";
+  gameScreen.style.display = "none";
 }
 
 function handleInit(number) {
@@ -202,5 +216,37 @@ function handleUnknownCode() {
 function handlePlayerDisconnect(playerNumberOfDisconnected) {
   console.log(`Player ${playerNumberOfDisconnected} disconected`);
   if (playerNumberOfDisconnected < playerNumber) playerNumber -= 1;
-  console.log(`you are now player ${playerNumber}`);
+  playerCount -= 1;
+  handleUpdatePlayerCount(playerCount);
+  // console.log(`you are now player ${playerNumber}`);
+}
+
+function handleUpdatePlayerCount(number) {
+  playerCount = number;
+  playerCountSpan.innerHTML = playerCount;
+  console.log(playerCount);
+}
+
+function handleUpdateTime(date) {
+  const currentDate = new Date(Date.now());
+  date = new Date(date);
+  endTimeSpan.innerHTML = getTimeBetweenDates(currentDate, date);
+}
+
+// get difference in milliseconds between two dates
+function getTimeBetweenDates(date1, date2) {
+  let difference = date2 - date1;
+  difference = difference / 1000;
+  return (
+    Math.floor(difference / 3600) +
+    " hours " +
+    Math.floor(difference / 60) +
+    " minutes and " +
+    Math.floor(difference % 60) +
+    " seconds"
+  );
+}
+
+function handleEnd() {
+  unInit();
 }
