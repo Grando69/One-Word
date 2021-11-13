@@ -67,11 +67,13 @@ function handleWordConfirm() {
         .split(" ")
         [currentSentence.innerText.split(" ").length - 1].endsWith(".")
     ) {
-      currentSentence.innerText = `${wordInput.value}`;
+      currentSentence.innerText = `${currentSentence.innerText} ${
+        wordInput.value.split(" ")[0]
+      }`;
     } else {
-      currentSentence.innerText = `${
-        currentSentence.innerText
-      } ${wordInput.value.toLowerCase()}`;
+      currentSentence.innerText = `${currentSentence.innerText} ${
+        wordInput.value.toLowerCase().split(" ")[0]
+      }`;
     }
     wordInput.value = "";
     disableButton();
@@ -142,6 +144,7 @@ function unInit() {
   joinInput.value = "";
   titleScreen.style.display = "flex";
   gameScreen.style.display = "none";
+  inGame = false;
 }
 
 function handleInit(number) {
@@ -240,9 +243,9 @@ function getTimeBetweenDates(date1, date2) {
   return (
     Math.floor(difference / 3600) +
     " hours " +
-    Math.floor(difference / 60) +
-    " minutes and " +
-    Math.floor(difference % 60) +
+    Math.floor((difference % 3600) / 60) +
+    " minutes " +
+    Math.floor((difference % 3600) % 60) +
     " seconds"
   );
 }

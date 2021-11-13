@@ -9,7 +9,7 @@ function createGameState() {
     currentPlayer: 1,
     players: [1],
     running: false,
-    endTime: Date.now() + 1000 * 60,
+    endTime: Date.now() + 1000 * 60 * 60 * 2,
   };
 }
 
