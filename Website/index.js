@@ -1,6 +1,5 @@
-// const socket = io("139.177.178.13:8080");
-const socket = io("127.0.0.1:8080");
-// !127.0.0.1 == localhost
+const server = process.env.SERVER || "http://localhost:8080";
+const socket = io(server);
 
 const wordConfirm = document.getElementById("wordConfirm");
 const wordConfirmDisabled = document.getElementById("wordConfirmDisabled");
