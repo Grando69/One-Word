@@ -60,6 +60,7 @@ window.addEventListener("beforeunload", function (e) {
 
 function handleWordConfirm() {
   if (wordInput.value) {
+    wordInput.value = wordInput.value.trim();
     if (
       currentSentence.innerText.length === 0 ||
       currentSentence.innerText
