@@ -1,6 +1,6 @@
 [submodule "One-Word-Server"]
-	path = Server
+	path = One-Word-Server
 	url = https://github.com/Grando69/One-Word-Server.git
 [submodule "One-Word-Website"]
-	path = Website
+	path = One-Word-Website
 	url = https://github.com/Grando69/One-Word-Website.git
